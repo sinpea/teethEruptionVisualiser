@@ -4,7 +4,10 @@ import { convertToJson } from "../controllers/convertTextToJson";
 import { dentalPathIds } from "../controllers/dentalArcPathIds";
 import "./teethSvg.css"
 function TeethSvg({activationState,setterMethod}){
-    const [jsonData,setJsonData] = useState(null);
+   const colorArray = ['grey','yellow','white','sky-blue','blue'];
+
+   const [jsonData,setJsonData] = useState(null);
+    
     useEffect(()=>{
         //initial loading of jsonData
         async function loadData(){
@@ -34,7 +37,7 @@ function TeethSvg({activationState,setterMethod}){
     viewBox="0 0 800 1250"
     inkscape:version="0.48.2 r9819"
     sodipodi:docname="łuki z.svg"
-    style={{transform:"scale(1)",width:"200px",height:"auto"}}>
+    style={{transform:"scale(1)",width:"auto",height:"810px"}}>
     <title
      id="title2987">dental arches</title>
   <metadata
@@ -182,7 +185,8 @@ function TeethSvg({activationState,setterMethod}){
                //set stateManagement
                //get the state from some array somewhere
                //de=deactivate,ae=activate
-               styleObj.fill = (activationState[TeethName] === "de")?'grey':'yellow'; 
+               //styleObj.fill = (activationState[TeethName] === "de")?'grey':'yellow';
+               styleObj.fill=colorArray[activationState[TeethName]]; 
             }
          }
          return(

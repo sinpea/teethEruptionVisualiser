@@ -1,0 +1,14 @@
+.seek {
+    width: 300px;
+    height: 5px;
+    margin-left: 30px;
+    background-color: green;
+  }
+  
+  .draggable {
+    width: 20px;
+    height: 20px;
+    touch-action: none;
+    background-color: black;
+  }
+  

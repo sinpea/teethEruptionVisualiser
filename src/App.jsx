@@ -2,12 +2,13 @@ import { useEffect, useState } from "react"
 import { TeethSvg } from "./components/teethSvg"
 import { dentalPathIds } from "./controllers/dentalArcPathIds"
 import { animationLoopData } from "./controllers/animationManager"
+import { Seek } from "./components/seek"
 import "./App.css"
 function App() {
   const [teethState,setTeethState] = useState(()=>{
     const teethSt = {};
     for(const key in dentalPathIds){
-      teethSt[key] = "de";//de=deactivated,ae=activated
+      teethSt[key] = 0;//de=deactivated,ae=activated
     }
     return teethSt;
   });
@@ -19,9 +20,9 @@ function App() {
   const setterMethod = (e)=>{
     const a = e.target.attributes.teethType.value;
     setTeethState((prevState)=>{
-      let obj = Object.create({});path4454
+      let obj = Object.create({});
       Object.assign(obj,prevState);
-      obj[a] = obj[a]==="de"?"ae":"de";
+      obj[a] = obj[a]===0?1:0;
       return obj;
     })
   };
@@ -36,7 +37,10 @@ function App() {
       }); 
     }
   }
-
+  const setFrameFromSeek = (percent)=>{
+    console.log("framer")
+    setAnimationFrame((prevState)=>{return[prevState[0],Math.floor(percent * animationLoopData.length)]})
+  }
   const setPlay=()=>{
     setAnimationFrame((prevState)=>{return[true,prevState[1]]})
   }
@@ -80,18 +84,19 @@ function App() {
   },[animationState])
   return (
     <div className="parentContainer">
-      <div>
-      <button onClick={()=>{setPlay()}}>Play</button>
-      <button onClick={()=>{setPause()}}>Pause</button>
-      <button onClick={()=>{resetAnim()}}>Reset</button>
-      <div>{`Is Playing = ${animationState[0]}`}</div>
-      <div>{`Frame No. = ${animationState[1]}`}</div>
+      <div className="leftPane">
+        <button onClick={()=>{setPlay()}}>Play</button>
+        <button onClick={()=>{setPause()}}>Pause</button>
+        <button onClick={()=>{resetAnim()}}>Reset</button>
+        <div className="displayText">{`Is Playing = ${animationState[0]}`}</div>
+        <div className="displayText">{`Frame No. = ${animationState[1]}`}</div>
+        <Seek setFrameFromSeek={setFrameFromSeek}/>
       {/*Make a teeth selector that manages the setter and activates a couple of teeth, enables the animation and freezes screen till uninvoked */}
       </div>
       <div>
       {/*put the text box for individual or grouped active teeth info here, make it scrollable */}
       </div>
-      <div style={{background:"white"}}>
+      <div style={{background:"wheat"}}>
         <TeethSvg activationState={teethState} setterMethod={setterMethod}/>
       </div>
     </div>
