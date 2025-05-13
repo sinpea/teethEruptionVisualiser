@@ -1,13 +1,14 @@
 import { useState,useRef,useEffect } from "react";
 import "./seek.css";
-function Seek({setFrameFromSeek}){
+function Seek({setFrameFromSeek,seekPosition,isPlaying}){
     const [offset, setOffSet] = useState({ dx: 0, dy: 0 });
     const [position, setPosition] = useState(0);
     const width = 300;
     const ele = useRef(null);
     useEffect(() => {
-      //console.log('load');
-    });
+      console.log(seekPosition);
+      if(ele.current != null){ele.current.style.transform = `translate(${seekPosition}px,0px)`}
+});
     const handleMouseDown = (e) => {
       const startPosition = {
         x: e.clientX - offset.dx,
@@ -27,7 +28,7 @@ function Seek({setFrameFromSeek}){
         }
         console.log(dx1);
         if(!(dx1/width > 1 || dx1/width < 0)){
-          ele.current.style.transform = `translate(${dx1}px,0px)`;
+          //ele.current.style.transform = `translate(${dx1}px,0px)`;
         }
         setPosition((prevState) => {
           return dx1 / width;
@@ -35,6 +36,17 @@ function Seek({setFrameFromSeek}){
         setOffSet((prevState) => {
           return { dx: dx1, dy: dy1 };
         });
+
+        if(dx1/width >= 1){
+          setFrameFromSeek(1);
+        }
+        else if(dx1/width <= 0){
+          setFrameFromSeek(0);
+        }
+        else{
+          setFrameFromSeek(dx1/width);
+          console.log(dx1/width);
+        }
         
       };
       const handleMouseUp = (event) => {
@@ -50,16 +62,16 @@ function Seek({setFrameFromSeek}){
           setFrameFromSeek(dx1/width);
           console.log(dx1/width);
         }
-        
+        //  ele.current.style={transform:`translate(${seekPosition * 300}px,0px)`};
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-    };
+    }; 
     return (
       <div className="seek">
-        <div className="draggable" ref={ele} onMouseDown={handleMouseDown}></div>
+        <div className="draggable" ref={ele} style={{}} onMouseDown={handleMouseDown}></div>
       </div>
     );
   }

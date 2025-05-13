@@ -12,7 +12,10 @@ function App() {
     }
     return teethSt;
   });
+
+
   //animationStateManager
+  const [seekPosition,setSeekPosition] = useState(0);
   const [animationState,setAnimationFrame] = useState([false,0]);
   const [frameRate,setFrameRate] = useState(0.5);//in fps
 
@@ -48,6 +51,8 @@ function App() {
   const resetAnim=()=>{
     setAnimationFrame((prevState)=>{return[false,0]});
     setterMethodUnderAnimation(animationLoopData[0].changes)
+    setSeekPosition((prevState)=>{
+      return (( animationState[1]) * 300/animationLoopData.length)})
     
   }
   const setPause=()=>{
@@ -75,12 +80,15 @@ function App() {
         setterMethodUnderAnimation(animationLoopData[Number(animationState[1])].changes);
         //wait some time
         await sleep(frameRate*1000)
+        console.log(seekPosition)
         setAnimationFrame((prevState)=>{console.log(`frame:${prevState[1]}`);return [prevState[0],(prevState[0])?(prevState[1]+1):prevState[1]]})
       }
     }
     if(animationState[0]){
       frameCompute();
     }
+    setSeekPosition((prevState)=>{
+      return (( animationState[1]) * 300/animationLoopData.length)})
   },[animationState])
   return (
     <div className="parentContainer">
@@ -90,14 +98,14 @@ function App() {
         <button onClick={()=>{resetAnim()}}>Reset</button>
         <div className="displayText">{`Is Playing = ${animationState[0]}`}</div>
         <div className="displayText">{`Frame No. = ${animationState[1]}`}</div>
-        <Seek setFrameFromSeek={setFrameFromSeek}/>
+        <Seek setFrameFromSeek={setFrameFromSeek} seekPosition={seekPosition}/>
       {/*Make a teeth selector that manages the setter and activates a couple of teeth, enables the animation and freezes screen till uninvoked */}
       </div>
       <div>
       {/*put the text box for individual or grouped active teeth info here, make it scrollable */}
       </div>
       <div style={{background:"wheat"}}>
-        <TeethSvg activationState={teethState} setterMethod={setterMethod}/>
+        <TeethSvg activationState={teethState} setterMethod={setterMethod} isPlaying={animationState[0]}/>
       </div>
     </div>
   )
