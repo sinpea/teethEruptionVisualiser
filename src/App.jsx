@@ -8,7 +8,7 @@ function App() {
   const [teethState,setTeethState] = useState(()=>{
     const teethSt = {};
     for(const key in dentalPathIds){
-      teethSt[key] = 0;//de=deactivated,ae=activated
+      teethSt[key] = 0;
     }
     return teethSt;
   });
@@ -19,7 +19,11 @@ function App() {
   const [animationState,setAnimationFrame] = useState([false,0]);
   const [frameRate,setFrameRate] = useState(0.5);//in fps
   const [isReset,setIsReset] = useState(false);
+  const [isEnded,setIsEnd] = useState(false);
 
+  const setEnd = ()=>{
+    setIsEnd((prevState)=>{return false})
+  }
   const setterMethod = (e)=>{
     const a = e.target.attributes.teethType.value;
     setTeethState((prevState)=>{
@@ -60,9 +64,6 @@ function App() {
   const setReset = ()=>{
     setIsReset((prev)=>{return false});
   }
-  useEffect(()=>{
-    //console.log(teethState);
-  })
 
   //this runs after every render
   useEffect(()=>{
@@ -74,6 +75,7 @@ function App() {
       if(animationState[0] == true){
         //set animation state with respect to state
         if(animationState[1] == animationLoopData.length){
+          setIsEnd((prevState)=>{return true});
           setPause();
           return;
         }
@@ -99,7 +101,7 @@ function App() {
         <button onClick={()=>{resetAnim()}}>Reset</button>
         <div className="displayText">{`Is Playing = ${animationState[0]}`}</div>
         <div className="displayText">{`Frame No. = ${animationState[1]}`}</div>
-        <Seek setFrameFromSeek={setFrameFromSeek} seekPosition={seekPosition} isReset={isReset} setReset={setReset}/>
+        <Seek setFrameFromSeek={setFrameFromSeek} seekPosition={seekPosition} isReset={isReset} setReset={setReset} setIsEnd={setEnd} isEnded={isEnded}/>
       {/*Make a teeth selector that manages the setter and activates a couple of teeth, enables the animation and freezes screen till uninvoked */}
       </div>
       <div>
