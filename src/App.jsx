@@ -52,7 +52,9 @@ function App() {
     setAnimationFrame((prevState)=>{return[false,0]});
     setterMethodUnderAnimation(animationLoopData[0].changes)
     setSeekPosition((prevState)=>{
-      return (( animationState[1]) * 300/animationLoopData.length)})
+      return (( animationState[1]) * 300/animationLoopData.length)});
+
+    console.log(``)
     
   }
   const setPause=()=>{
