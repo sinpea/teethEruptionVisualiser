@@ -18,7 +18,7 @@ function App() {
   const [seekPosition,setSeekPosition] = useState(0);
   const [animationState,setAnimationFrame] = useState([false,0]);
   const [frameRate,setFrameRate] = useState(0.5);//in fps
-
+  const [isReset,setIsReset] = useState(false);
 
   const setterMethod = (e)=>{
     const a = e.target.attributes.teethType.value;
@@ -41,7 +41,7 @@ function App() {
     }
   }
   const setFrameFromSeek = (percent)=>{
-    console.log("framer")
+    console.log(`frame perc ${percent}`)
     setAnimationFrame((prevState)=>{return[prevState[0],Math.floor(percent * animationLoopData.length)]})
   }
   const setPlay=()=>{
@@ -51,18 +51,17 @@ function App() {
   const resetAnim=()=>{
     setAnimationFrame((prevState)=>{return[false,0]});
     setterMethodUnderAnimation(animationLoopData[0].changes)
-    setSeekPosition((prevState)=>{
-      return (( animationState[1]) * 300/animationLoopData.length)});
-
-    console.log(``)
-    
+    setIsReset((prevState)=>{return true});
+    //setFrameFromSeek(0);
   }
   const setPause=()=>{
     setAnimationFrame((prevState)=>{return[false,prevState[1]]})
   }
-
+  const setReset = ()=>{
+    setIsReset((prev)=>{return false});
+  }
   useEffect(()=>{
-    console.log(teethState);
+    //console.log(teethState);
   })
 
   //this runs after every render
@@ -78,11 +77,11 @@ function App() {
           setPause();
           return;
         }
-        console.log(animationLoopData[0])
+        //console.log(animationLoopData[0])
         setterMethodUnderAnimation(animationLoopData[Number(animationState[1])].changes);
         //wait some time
         await sleep(frameRate*1000)
-        console.log(seekPosition)
+        //console.log(seekPosition)
         setAnimationFrame((prevState)=>{console.log(`frame:${prevState[1]}`);return [prevState[0],(prevState[0])?(prevState[1]+1):prevState[1]]})
       }
     }
@@ -100,7 +99,7 @@ function App() {
         <button onClick={()=>{resetAnim()}}>Reset</button>
         <div className="displayText">{`Is Playing = ${animationState[0]}`}</div>
         <div className="displayText">{`Frame No. = ${animationState[1]}`}</div>
-        <Seek setFrameFromSeek={setFrameFromSeek} seekPosition={seekPosition}/>
+        <Seek setFrameFromSeek={setFrameFromSeek} seekPosition={seekPosition} isReset={isReset} setReset={setReset}/>
       {/*Make a teeth selector that manages the setter and activates a couple of teeth, enables the animation and freezes screen till uninvoked */}
       </div>
       <div>

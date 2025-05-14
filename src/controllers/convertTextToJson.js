@@ -6,7 +6,7 @@ const convertToJson = (txt)=>{
             count++;
         }
     }
-    console.log(count);
+    //console.log(count);
     for(let i = 0;i < count;i++){
         json[txt.substring(0,txt.indexOf(':'))] = txt.substring(txt.indexOf(':')+1,txt.indexOf(';'))
         txt = txt.substring(txt.indexOf(';')+1);

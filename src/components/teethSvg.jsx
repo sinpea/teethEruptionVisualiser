@@ -18,7 +18,7 @@ function TeethSvg({activationState,setterMethod}){
         loadData();
     },[])
     useEffect(()=>{
-        console.log(jsonData);
+        //console.log(jsonData);
     })
 
 
