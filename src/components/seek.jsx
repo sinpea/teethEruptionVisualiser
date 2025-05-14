@@ -23,8 +23,16 @@ function Seek({setFrameFromSeek,seekPosition,isPlaying}){
   
         const dx1 = event.clientX - startPosition.x;
         const dy1 = event.clientY - startPosition.y;
-        if(dx1/width > 1 || dx1/width<0){
-          return;
+        if(dx1/width >= 1){
+          console.log("quid")
+          setFrameFromSeek(1);
+        }
+        else if(dx1/width <= 0){
+          setFrameFromSeek(0);
+        }
+        else{
+          setFrameFromSeek(dx1/width);
+          console.log(dx1/width);
         }
         console.log(dx1);
         if(!(dx1/width > 1 || dx1/width < 0)){
@@ -37,16 +45,7 @@ function Seek({setFrameFromSeek,seekPosition,isPlaying}){
           return { dx: dx1, dy: dy1 };
         });
 
-        if(dx1/width >= 1){
-          setFrameFromSeek(1);
-        }
-        else if(dx1/width <= 0){
-          setFrameFromSeek(0);
-        }
-        else{
-          setFrameFromSeek(dx1/width);
-          console.log(dx1/width);
-        }
+        
         
       };
       const handleMouseUp = (event) => {
